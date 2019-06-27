@@ -1,6 +1,8 @@
 package be.vdab.fietsacademy.repositories;
 
+import be.vdab.fietsacademy.domain.Docent;
 import be.vdab.fietsacademy.domain.Geslacht;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,8 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.math.BigDecimal;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
@@ -20,6 +24,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Import(JpaDocentRepository.class)
 public class JpaDocentRepositoryTest extends AbstractTransactionalJUnit4SpringContextTests {
     @Autowired private JpaDocentRepository repository;
+    private static final String DOCENTEN = "docenten";
+    private Docent docent;
+
+    @Before public void before(){
+        docent = new Docent("test", "test", BigDecimal.TEN, "test@fietsacademy.be", Geslacht.MAN);
+    }
 
     private long idVanTestMan(){
         return super.jdbcTemplate.queryForObject("select id from docenten where voornaam = 'testM'",
@@ -41,5 +51,10 @@ public class JpaDocentRepositoryTest extends AbstractTransactionalJUnit4SpringCo
     }
     @Test public void vrouw(){
         assertThat(repository.findById(idVanTestVrouw()).get().getGeslacht()).isEqualTo(Geslacht.VROUW);
+    }
+    @Test public void create(){
+        repository.create(docent);
+        assertThat(docent.getId()).isPositive();
+        assertThat(super.countRowsInTableWhere(DOCENTEN, "id=" + docent.getId())).isOne();
     }
 }

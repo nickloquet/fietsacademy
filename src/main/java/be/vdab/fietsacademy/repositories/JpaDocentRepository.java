@@ -8,7 +8,6 @@ import java.util.Optional;
 @Repository
 public class JpaDocentRepository implements DocentRepository {
     private final EntityManager manager;
-
     public JpaDocentRepository(EntityManager manager) {
         this.manager = manager;
     }
@@ -16,5 +15,8 @@ public class JpaDocentRepository implements DocentRepository {
     @Override public Optional<Docent> findById(long id){
 //      throw new UnsupportedOperationException();                    initiële waarde voor test
         return Optional.ofNullable(manager.find(Docent.class, id));
+    }
+    @Override public void create(Docent docent){
+        manager.persist(docent);
     }
 }
