@@ -1,8 +1,6 @@
 package be.vdab.fietsacademy.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
@@ -15,6 +13,8 @@ public class Docent implements Serializable {
     private String familienaam;
     private BigDecimal wedde;
     private String emailAdres;
+    @Enumerated(EnumType.STRING)
+    private Geslacht geslacht;
 
     public long getId() {
         return id;
@@ -30,6 +30,9 @@ public class Docent implements Serializable {
     }
     public String getEmailAdres() {
         return emailAdres;
+    }
+    public Geslacht getGeslacht() {
+        return geslacht;
     }
 }
 

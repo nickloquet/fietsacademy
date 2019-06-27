@@ -1,5 +1,6 @@
 package be.vdab.fietsacademy.repositories;
 
+import be.vdab.fietsacademy.domain.Geslacht;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +20,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Import(JpaDocentRepository.class)
 public class JpaDocentRepositoryTest extends AbstractTransactionalJUnit4SpringContextTests {
     @Autowired private JpaDocentRepository repository;
+
     private long idVanTestMan(){
         return super.jdbcTemplate.queryForObject("select id from docenten where voornaam = 'testM'",
+                Long.class);
+    }
+    private long idVanTestVrouw(){
+        return super.jdbcTemplate.queryForObject("select id from docenten where voornaam='testV'",
                 Long.class);
     }
 
@@ -29,5 +35,11 @@ public class JpaDocentRepositoryTest extends AbstractTransactionalJUnit4SpringCo
     }
     @Test public void findOnbestaandeId(){
         assertThat(repository.findById(-1)).isNotPresent();
+    }
+    @Test public void man(){
+        assertThat(repository.findById(idVanTestMan()).get().getGeslacht()).isEqualTo(Geslacht.MAN);
+    }
+    @Test public void vrouw(){
+        assertThat(repository.findById(idVanTestVrouw()).get().getGeslacht()).isEqualTo(Geslacht.VROUW);
     }
 }
