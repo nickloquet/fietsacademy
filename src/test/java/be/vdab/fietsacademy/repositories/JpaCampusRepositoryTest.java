@@ -12,7 +12,6 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 import org.springframework.test.context.junit4.SpringRunner;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
