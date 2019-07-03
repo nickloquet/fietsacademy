@@ -2,6 +2,7 @@ package be.vdab.fietsacademy.repositories;
 
 import be.vdab.fietsacademy.domain.Adres;
 import be.vdab.fietsacademy.domain.Campus;
+import be.vdab.fietsacademy.domain.TelefoonNr;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -44,5 +45,9 @@ public class JpaCampusRepositoryTest extends AbstractTransactionalJUnit4SpringCo
     @Test public void create(){
         repository.create(campus);
         assertThat(super.countRowsInTableWhere(CAMPUS, "id="+campus.getId())).isOne();
+    }
+    @Test public void telefoonNrsLezen(){
+        assertThat(repository.findById(idTestCampus()).get().getTelefoonNrs()).containsOnly(
+                new TelefoonNr("1", false, "test"));
     }
 }
