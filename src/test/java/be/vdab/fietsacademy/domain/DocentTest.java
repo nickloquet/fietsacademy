@@ -8,9 +8,11 @@ import static org.assertj.core.api.Assertions.*;
 public class DocentTest {
     private final static BigDecimal WEDDE = BigDecimal.valueOf(200);
     private Docent docent1;
+    private Campus campus1;
 
     @Before public void before(){
-        docent1 = new Docent("test", "test", WEDDE, "test@fietsacademy.be", Geslacht.MAN);
+        campus1 = new Campus("test",new Adres("test","test","test","test"));
+        docent1 = new Docent("test", "test", WEDDE, "test@fietsacademy.be", Geslacht.MAN, campus1);
     }
 
     @Test public void opslag(){
@@ -56,5 +58,9 @@ public class DocentTest {
         docent1.addBijnaam("test");
         assertThat(docent1.removeBijnaam("test2")).isFalse();
         assertThat(docent1.getBijnamen()).containsOnly("test");
+    }
+    @Test public void eenNullCampusInDeConstructorMislukt(){
+        assertThatNullPointerException().isThrownBy(()->new Docent(
+                "test","test",WEDDE,"test@fietsacademy.be",Geslacht.MAN, null));
     }
 }
