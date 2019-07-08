@@ -11,6 +11,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "docenten")
+@NamedEntityGraph(name = "Docent.metCampus", attributeNodes = @NamedAttributeNode("campus"))
 //@NamedQuery(name = "Docent.findByWeddeBetween",
 //        query = "select d from Docent d where d.wedde between :van and :tot order by d.wedde, d.id")
 public class Docent implements Serializable {
@@ -129,3 +130,12 @@ public class Docent implements Serializable {
 
 //@Column(naam = "kolomnaam") => als variabele niet hetzelfde als de kolomnaam in de database
 //@Transient => variabele die geen kolom in database heeft
+
+// graph met meer geassocieerde entities
+//@NamedEntityGraph(name = "Docent.metCampusEnVerantwoordelijkheden",
+//        attributeNodes = { @NamedAttributeNode("campus"), @NamedAttributeNode("verantwoordelijkheden")})
+
+// graph met geassocieerde entity van een geassocieerde entity
+//@NamedEntityGraph(name = "Docent.metCampusEnManager",
+//    attributeNodes = @NamedAttributeNode(value = "campus", subgraph = "metManager"),
+//    subgraphs = @NamedSubgraph(name = "metManager", attributeNodes = @NamedAttributeNode("manager")))

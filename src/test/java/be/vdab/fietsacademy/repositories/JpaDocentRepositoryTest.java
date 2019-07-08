@@ -83,9 +83,11 @@ public class JpaDocentRepositoryTest extends AbstractTransactionalJUnit4SpringCo
         BigDecimal duizend = BigDecimal.valueOf(1_000);
         BigDecimal tweeduizend = BigDecimal.valueOf(2_000);
         List<Docent> docenten = repository.findByWeddeBetween(duizend, tweeduizend);
+        manager.clear();
         assertThat(docenten).hasSize(super.countRowsInTableWhere(
                 DOCENTEN, "wedde between 1000 and 2000"))
                 .allSatisfy(docent -> assertThat(docent.getWedde()).isBetween(duizend, tweeduizend));
+        assertThat(docenten).extracting(docent -> docent.getCampus().getNaam());
     }
     @Test public void findEmailAdressen(){
         assertThat(repository.findEmailAdressen())
