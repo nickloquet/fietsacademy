@@ -8,11 +8,16 @@ import static org.assertj.core.api.Assertions.*;
 public class DocentTest {
     private final static BigDecimal WEDDE = BigDecimal.valueOf(200);
     private Docent docent1;
+    private Docent docent2;
+    private Docent nogEensDocent1;
     private Campus campus1;
 
     @Before public void before(){
         campus1 = new Campus("test",new Adres("test","test","test","test"));
-        docent1 = new Docent("test", "test", WEDDE, "test@fietsacademy.be", Geslacht.MAN, campus1);
+        docent1 = new Docent("test", "test", WEDDE, "test@fietsacademy.be", Geslacht.MAN);  //, campus1
+        docent2 = new Docent("test2", "test2", WEDDE, "test2@fietsacademy.be", Geslacht.MAN);
+        nogEensDocent1 = new Docent("test", "test", WEDDE, "test@fietsacademy.be", Geslacht.MAN);  //, campus1
+
     }
 
     @Test public void opslag(){
@@ -59,8 +64,27 @@ public class DocentTest {
         assertThat(docent1.removeBijnaam("test2")).isFalse();
         assertThat(docent1.getBijnamen()).containsOnly("test");
     }
-    @Test public void eenNullCampusInDeConstructorMislukt(){
-        assertThatNullPointerException().isThrownBy(()->new Docent(
-                "test","test",WEDDE,"test@fietsacademy.be",Geslacht.MAN, null));
+//    @Test public void eenNullCampusInDeConstructorMislukt(){
+//        assertThatNullPointerException().isThrownBy(()->new Docent(
+//                "test","test",WEDDE,"test@fietsacademy.be",Geslacht.MAN, null));
+//    }
+    @Test public void meerdereDocentenKunnenTotDezelfdeCampusBehoren(){
+        assertThat(campus1.add(docent1)).isTrue();
+        assertThat(campus1.add(docent2)).isTrue();
+    }
+    @Test public void docentenZijnGelijkAlsHunEmailAdresGelijkZijn(){
+        assertThat(docent1).isEqualTo(nogEensDocent1);
+    }
+    @Test public void docentenZijnVerschillendAlsHunEmailAdresVerschillen(){
+        assertThat(docent1).isNotEqualTo(docent2);
+    }
+    @Test public void eenDocentVerschiltVanNull(){
+        assertThat(docent1).isNotEqualTo(null);
+    }
+    @Test public void eenDocentVerschiltVanEenAnderTypeObject(){
+        assertThat(docent1).isNotEqualTo("");
+    }
+    @Test public void gelijkeDocentenGevenDezelfdeHashcode(){
+        assertThat(docent1).hasSameHashCodeAs(nogEensDocent1);
     }
 }

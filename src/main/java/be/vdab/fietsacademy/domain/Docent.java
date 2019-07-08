@@ -27,19 +27,19 @@ public class Docent implements Serializable {
     @CollectionTable(name = "docentenbijnamen", joinColumns = @JoinColumn(name = "docentid"))
     @Column(name = "bijnaam")
     private Set<String> bijnamen;
-    @ManyToOne(fetch = FetchType.LAZY, optional = false) @JoinColumn(name = "campusid")
-    private Campus campus;
+//    @ManyToOne(fetch = FetchType.LAZY, optional = false) @JoinColumn(name = "campusid")
+//    private Campus campus;
 
     protected Docent() {
     }
-    public Docent(String voornaam, String familienaam, BigDecimal wedde, String emailAdres, Geslacht geslacht, Campus campus) {
+    public Docent(String voornaam, String familienaam, BigDecimal wedde, String emailAdres, Geslacht geslacht) {    //Campus campus
         this.voornaam = voornaam;
         this.familienaam = familienaam;
         this.wedde = wedde;
         this.emailAdres = emailAdres;
         this.geslacht = geslacht;
         this.bijnamen = new LinkedHashSet<>();
-        setCampus(campus);
+//        setCampus(campus);
     }
 
     public long getId() {
@@ -64,13 +64,13 @@ public class Docent implements Serializable {
 //      return bijnamen;
         return Collections.unmodifiableSet(bijnamen);
     }
-    public Campus getCampus() {
-        return campus;
-    }
+//    public Campus getCampus() {
+//        return campus;
+//    }
 
-    public void setCampus(Campus campus) {
-        this.campus = campus;
-    }
+//    public void setCampus(Campus campus) {
+//        this.campus = campus;
+//    }
 
     public void opslag(BigDecimal percentage){
         if(percentage.compareTo(BigDecimal.ZERO) <= 0){
@@ -88,7 +88,20 @@ public class Docent implements Serializable {
     public boolean removeBijnaam(String bijnaam){
         return bijnamen.remove(bijnaam);
     }
+
+    @Override public boolean equals(Object object){
+        if(!(object instanceof Docent)){
+            return false;
+        }
+        if(emailAdres == null){
+            return false;
+        }
+        return emailAdres.equalsIgnoreCase(((Docent) object).emailAdres);
+    }
+    @Override public int hashCode(){
+        return emailAdres == null ? 0 : emailAdres.toLowerCase().hashCode();
+    }
 }
 
-//@Column(naam = "kolomnaam") => als variabele niet hetzelfde als de kolomnaar in de database
+//@Column(naam = "kolomnaam") => als variabele niet hetzelfde als de kolomnaam in de database
 //@Transient => variabele die geen kolom in database heeft

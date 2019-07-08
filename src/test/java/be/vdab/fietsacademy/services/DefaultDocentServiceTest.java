@@ -28,7 +28,7 @@ public class DefaultDocentServiceTest {
     @Before public void before(){
         campus = new Campus("test", new Adres("test","test","test","test"));
         docent = new Docent("test", "test", BigDecimal.valueOf(100),
-                "test@fietsacademy.be", Geslacht.MAN, campus);
+                "test@fietsacademy.be", Geslacht.MAN);      //, campus
         when(repository.findById(1)).thenReturn(Optional.of(docent));
         when(repository.findById(-1)).thenReturn(Optional.empty());
         service = new DefaultDocentService(repository);
