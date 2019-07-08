@@ -11,13 +11,14 @@ public class DocentTest {
     private Docent docent2;
     private Docent nogEensDocent1;
     private Campus campus1;
+    private Campus campus2;
 
     @Before public void before(){
         campus1 = new Campus("test",new Adres("test","test","test","test"));
-        docent1 = new Docent("test", "test", WEDDE, "test@fietsacademy.be", Geslacht.MAN);  //, campus1
-        docent2 = new Docent("test2", "test2", WEDDE, "test2@fietsacademy.be", Geslacht.MAN);
-        nogEensDocent1 = new Docent("test", "test", WEDDE, "test@fietsacademy.be", Geslacht.MAN);  //, campus1
-
+        campus2 = new Campus("test2", new Adres("test2","test2","test2","test2"));
+        docent1 = new Docent("test", "test", WEDDE, "test@fietsacademy.be", Geslacht.MAN, campus1);
+        docent2 = new Docent("test2", "test2", WEDDE, "test2@fietsacademy.be", Geslacht.MAN, campus1);
+        nogEensDocent1 = new Docent("test", "test", WEDDE, "test@fietsacademy.be", Geslacht.MAN, campus1);
     }
 
     @Test public void opslag(){
@@ -64,13 +65,12 @@ public class DocentTest {
         assertThat(docent1.removeBijnaam("test2")).isFalse();
         assertThat(docent1.getBijnamen()).containsOnly("test");
     }
-//    @Test public void eenNullCampusInDeConstructorMislukt(){
-//        assertThatNullPointerException().isThrownBy(()->new Docent(
-//                "test","test",WEDDE,"test@fietsacademy.be",Geslacht.MAN, null));
-//    }
+    @Test public void eenNullCampusInDeConstructorMislukt(){
+        assertThatNullPointerException().isThrownBy(()->new Docent(
+                "test","test",WEDDE,"test@fietsacademy.be",Geslacht.MAN, null));
+    }
     @Test public void meerdereDocentenKunnenTotDezelfdeCampusBehoren(){
-        assertThat(campus1.add(docent1)).isTrue();
-        assertThat(campus1.add(docent2)).isTrue();
+        assertThat(campus1.getDocenten()).containsOnly(docent1, docent2);
     }
     @Test public void docentenZijnGelijkAlsHunEmailAdresGelijkZijn(){
         assertThat(docent1).isEqualTo(nogEensDocent1);
@@ -86,5 +86,18 @@ public class DocentTest {
     }
     @Test public void gelijkeDocentenGevenDezelfdeHashcode(){
         assertThat(docent1).hasSameHashCodeAs(nogEensDocent1);
+    }
+    @Test public void docent1KomtVoorInCampus1(){
+        assertThat(docent1.getCampus()).isEqualTo(campus1);
+        assertThat(campus1.getDocenten()).contains(docent1);
+    }
+    @Test public void docent1VerhuistNaarCampus2(){
+        docent1.setCampus(campus2);
+        assertThat(docent1.getCampus()).isEqualTo(campus2);
+        assertThat(campus1.getDocenten()).containsOnly(docent2);
+        assertThat(campus2.getDocenten()).containsOnly(docent1);
+    }
+    @Test public void eenBullCampusMislukt(){
+        assertThatNullPointerException().isThrownBy(()-> docent1.setCampus(null));
     }
 }
