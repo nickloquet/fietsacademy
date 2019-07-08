@@ -12,6 +12,7 @@ public class DocentTest {
     private Docent nogEensDocent1;
     private Campus campus1;
     private Campus campus2;
+    private Verantwoordelijkheid verantwoordelijkheid;
 
     @Before public void before(){
         campus1 = new Campus("test",new Adres("test","test","test","test"));
@@ -19,6 +20,7 @@ public class DocentTest {
         docent1 = new Docent("test", "test", WEDDE, "test@fietsacademy.be", Geslacht.MAN, campus1);
         docent2 = new Docent("test2", "test2", WEDDE, "test2@fietsacademy.be", Geslacht.MAN, campus1);
         nogEensDocent1 = new Docent("test", "test", WEDDE, "test@fietsacademy.be", Geslacht.MAN, campus1);
+        verantwoordelijkheid = new Verantwoordelijkheid("EHBO");
     }
 
     @Test public void opslag(){
@@ -99,5 +101,16 @@ public class DocentTest {
     }
     @Test public void eenBullCampusMislukt(){
         assertThatNullPointerException().isThrownBy(()-> docent1.setCampus(null));
+    }
+    @Test public void verantwoordelijkheidToevoegen(){
+        assertThat(docent1.add(verantwoordelijkheid)).isTrue();
+        assertThat(docent1.getVerantwoordelijkheden()).containsOnly(verantwoordelijkheid);
+        assertThat(verantwoordelijkheid.getDocenten()).containsOnly(docent1);
+    }
+    @Test public void verantwoordelijkheidVerwijderen(){
+        assertThat(docent1.add(verantwoordelijkheid)).isTrue();
+        assertThat(docent1.remove(verantwoordelijkheid)).isTrue();
+        assertThat(docent1.getVerantwoordelijkheden()).isEmpty();
+        assertThat(verantwoordelijkheid.getDocenten()).isEmpty();
     }
 }
